@@ -1,24 +1,25 @@
 openapi: 3.0.0
-# Added by API Auto Mocking Plugin
-# Petstore template
 servers:
-  - description: SwaggerHub API Auto Mocking
+  - description: WinMagic Securedoc Enterprise Server API
     url: https://virtserver.swaggerhub.com/ziababar/TestApi1/1.0.0
 info:
   description: |
-    This is a sample Petstore server.  You can find
-    out more about Swagger at
-    [http://swagger.io](http://swagger.io) or on
-    [irc.freenode.net, #swagger](http://swagger.io/irc/).
+    These are the REST APIs provided by the SecureDoc Enterprise Server
+    by WinMagic Corporation. Find out more about WinMagic and it's
+    enterprise-grade and endpoint encryption solutions at
+    [http://www.winmagic.com](http://www.winmagic.com).
   version: "1.0.0"
-  title: Swagger Petstore
-  termsOfService: 'http://swagger.io/terms/'
+  title:  SecureDoc Enterprise Server 
   contact:
-    email: apiteam@swagger.io
+    email: contact@winmagic.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
+  - name: account
+    description: Account management APIs
+  - name: user
+    description: User management APIs
   - name: pet
     description: Everything about your Pets
     externalDocs:
@@ -32,6 +33,46 @@ tags:
       description: Find out more about our store
       url: 'http://swagger.io'
 paths:
+  /account/logon:
+    post:
+      tags:
+        - account
+      summary: Authenticate and authorize system user
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findPetsByStatus
+      parameters:
+        - name: userName
+          in: path
+          description: login name for the user
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: path
+          description: Password for the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid status value
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
   /pet:
     post:
       tags:
